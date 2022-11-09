@@ -5,7 +5,6 @@
   <thead>
     <tr>
       <th>Name</th>
-      <th>HGVS</th>
       <th>Assembly</th>
       <th>Chromosome</th>
       <th>Start</th>
@@ -16,7 +15,6 @@
     {% for variant in r %}
       <tr>
         <td>{{ variant.name }}</td>
-        <td>{{ variant.synonyms[0] }}</td>
         <td>{{ variant.mappings[0].assembly_name }}</td>
         <td>{{ variant.mappings[0].seq_region_name }}</td>
         <td>{{ variant.mappings[0].start }}</td>

@@ -16,8 +16,10 @@ def viewdb():
     record = variants.find()
     return render_template('datatable.html', r = record)
 
+
 @app.route('/search', methods=('GET', 'POST'))
 def searchdb():
+
     if request.method == "POST":
         var_cons = request.form["variant_consequence_search"]
         chrom = request.form["chromosome_search"]
@@ -41,5 +43,5 @@ def searchdb():
         query = query.limit(20)
         print(type(query))
     else:
-        query = ["nothin to see ere"]
-    return render_template('search.html', r = query)
+        query = None
+    return render_template('search.html', r=query)

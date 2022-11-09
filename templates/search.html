@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-
 {% block content %} 
 
 <body>
@@ -30,8 +29,9 @@
             <th>End</th>
           </tr>
         </thead>
+        {% if r %}
+        {% for variant in r %}
         <tbody>
-          {% for variant in r %}
             <tr>
               <td>{{ variant.name }}</td>
               <td>{{ variant.synonyms[0] }}</td>
@@ -40,8 +40,9 @@
               <td>{{ variant.mappings[0].start }}</td>
               <td>{{ variant.mappings[0].end }}</td>
             </tr>
-          {% endfor %}
         </tbody>
+        {% endfor %}
+        {% endif %}
       </table>   
 </body>
 {% endblock %} 
