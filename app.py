@@ -27,14 +27,18 @@ def searchdb():
         #     query = query.find({"var_class":var_cons})
         # if chrom:
         #     query = query.find({"mappings.0.seq_region_name":chrom})
+        q_dict = {}
         if var_cons:
-            q1 = {"var_class":var_cons}
-        else: q1 = ""
-        if chrom:
-            q2 = {"mappings.0.seq_region_name":chrom}
-        else: q2 = ""
+            q_dict["var_class"] = var_cons
+        else:
+            q_dict["var_class"] = ""
+        if chrom: 
+            q_dict["mappings.0.seq_region_name"] = chrom
+        else:
+            q_dict["mappings.0.seq_region_name"] = ""
 
-        query = variants.find(q1,q2)
+
+        query = variants.find(q_dict)
         query = query.limit(20)
         print(type(query))
     else:
