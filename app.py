@@ -10,3 +10,8 @@ variants = db.variants
 @app.route('/', methods=('GET', 'POST'))
 def index():
     return render_template('index.html')
+
+@app.route('/view', methods=('GET', 'POST'))
+def viewdb():
+    record = variants.find()
+    return render_template('index.html', r = record)

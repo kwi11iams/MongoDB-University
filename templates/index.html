@@ -7,4 +7,7 @@
 <body>
     <h1>VariantsDB</h1>
     <p>This is a database</p>
+    {% for record in r %}
+    <p>{{record.name}} {{record.synonyms}}</p>
+    {% endfor %}
 </body>
