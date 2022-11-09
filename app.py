@@ -15,3 +15,13 @@ def index():
 def viewdb():
     record = variants.find()
     return render_template('index.html', r = record)
+
+
+@app.route('/search', methods=('GET', 'POST'))
+def searchdb():
+    if request.method == "POST":
+        search = request.form["s_para"]
+        result = variants.find({"var_class":search})
+    else:
+        result = ["nothin to see ere"]
+    return render_template('search.html', records = result)

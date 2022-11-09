@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>VariantsDB search</title>
+</head>
+<body>
+    <h1>VariantsDB search page</h1>
+    <form method="POST">
+        <p>
+            <input type="text" name="s_para"></input>
+        </p>
+        <p>
+            <button type="submit">Submit</button>
+        </p>
+
+    </form>
+    <hr>
+    {% for r in records %}
+        <div class="result">
+            <p>{{r}}</p>
+        </div>
+    {% endfor %}       
+</body>
