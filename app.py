@@ -28,13 +28,15 @@ def searchdb():
         # if chrom:
         #     query = query.find({"mappings.0.seq_region_name":chrom})
         if var_cons:
-            q1 = f'"var_class":{var_cons}'
+            q1 = {"var_class":var_cons}
         else: q1 = ""
         if chrom:
-            q2 = f'"mappings.0.seq_region_name":{chrom}'
+            q2 = {"mappings.0.seq_region_name":chrom}
         else: q2 = ""
 
-        query = variants.find({q1})
+        query = variants.find(q1,q2)
+        query = query.limit(20)
+        print(type(query))
     else:
         query = ["nothin to see ere"]
     return render_template('search.html', records = query)
