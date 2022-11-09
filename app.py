@@ -23,25 +23,29 @@ def searchdb():
     if request.method == "POST":
         var_cons = request.form["variant_consequence_search"]
         chrom = request.form["chromosome_search"]
+        start = request.form["start_search"]
+        end = request.form["end_search"]
 
-        # if var_cons:
-        #     query = query.find({"var_class":var_cons})
-        # if chrom:
-        #     query = query.find({"mappings.0.seq_region_name":chrom})
         q_dict = {}
         if var_cons:
             q_dict["var_class"] = var_cons
         else:
             q_dict["var_class"] = ""
+
         if chrom: 
             q_dict["mappings.0.seq_region_name"] = chrom
         else:
             q_dict["mappings.0.seq_region_name"] = ""
 
-
+        if start and end:
+            q_dict["mappings.0.start"] = {"$gte": int(start)}
+            
+            q_dict["mappings.0.end"] = {"$lte": int(end)}
+            
+        print(q_dict)
         query = variants.find(q_dict)
         query = query.limit(20)
-        print(type(query))
+
     else:
         query = None
     return render_template('search.html', r=query)
