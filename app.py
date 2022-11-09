@@ -20,8 +20,21 @@ def viewdb():
 @app.route('/search', methods=('GET', 'POST'))
 def searchdb():
     if request.method == "POST":
-        search = request.form["s_para"]
-        result = variants.find({"var_class":search})
+        var_cons = request.form["variant_consequence_search"]
+        chrom = request.form["chromosome_search"]
+
+        # if var_cons:
+        #     query = query.find({"var_class":var_cons})
+        # if chrom:
+        #     query = query.find({"mappings.0.seq_region_name":chrom})
+        if var_cons:
+            q1 = f'"var_class":{var_cons}'
+        else: q1 = ""
+        if chrom:
+            q2 = f'"mappings.0.seq_region_name":{chrom}'
+        else: q2 = ""
+
+        query = variants.find({q1})
     else:
-        result = ["nothin to see ere"]
-    return render_template('search.html', records = result)
+        query = ["nothin to see ere"]
+    return render_template('search.html', records = query)
