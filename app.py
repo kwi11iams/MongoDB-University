@@ -35,7 +35,7 @@ def searchdb():
             q_dict["var_class"] = var_cons
         else:
             q_dict["var_class"] = ""
-        if chrom:
+
 
         if chrom: 
             q_dict["mappings.0.seq_region_name"] = chrom
