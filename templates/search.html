@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block content %} 
+{% block content %}
 
 <body>
     <h1>VariantsDB search page</h1>
@@ -9,12 +9,12 @@
             <input type="text" name="variant_consequence_search"></input>
         </p>
         <p>
-            <p>Search by chromosome</p>
+            <p>Search by chromosome:</p>
             <input type="number" name="chromosome_search"></input>
         </p>
         <p>
           Search by position:
-          <input type="number" name="start_search">Start</input> <input type="number" name="end_search">End</input>
+          <p>Start<input type="number" name="start_search"></input>&nbsp;&nbsp;&nbsp;&nbsp;End<input type="number" name="end_search"></input></p>
         </p>
         <p>
             <button type="submit">Submit</button>
@@ -31,6 +31,7 @@
             <th>Chromosome</th>
             <th>Start</th>
             <th>End</th>
+            <th>Action</th>
           </tr>
         </thead>
         {% if r %}
@@ -43,19 +44,20 @@
               <td>{{ variant.mappings[0].seq_region_name }}</td>
               <td>{{ variant.mappings[0].start }}</td>
               <td>{{ variant.mappings[0].end }}</td>
+              <td>
+                <a class="btn btn-primary" href="/variant/{{variant._id}}">Edit</a>
+              </td>
             </tr>
         </tbody>
         {% endfor %}
         {% endif %}
-      </table>   
+      </table>
 </body>
-{% endblock %} 
+{% endblock %}
 
 {% block scripts %}
   <script>
     $(document).ready(function () {
       $('#data').DataTable();
-    });
   </script>
 {% endblock %}
-
