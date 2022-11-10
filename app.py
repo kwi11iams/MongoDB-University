@@ -1,9 +1,5 @@
 from flask import Flask, render_template, request, url_for, redirect
 from flask_pymongo import PyMongo
-from flask_wtf import FlaskForm
-from wtforms import (StringField, TextAreaField, IntegerField, BooleanField,
-                     RadioField)
-from wtforms.validators import InputRequired, Length
 
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/variantsdb"
