@@ -6,7 +6,7 @@
     <form method="POST">
         <p>
             <p>Search by variant type:
-            <select name="variant_consequence_search">
+            <select name="variant_type_search">
                 <option value="NULL">-- select option --</option>
                 {% for v in var_classes %}
                     <option value="{{v}}">{{v}}</option>
@@ -28,6 +28,17 @@
         <p>
             <p>Search by rsID:<input name="rsID"></input>
             </p>
+        </p>
+        <p>
+            <p>Search by most severe consequence:
+            <select name="var_cons">
+              <option value="NULL">-- select option --</option>
+                {% for cons in var_cons %}
+                    <option value="{{cons}}">{{cons}}</option>
+                {% endfor %}
+            </select>
+            </p>
+            <!-- <input type="number" name="chromosome_search"></input> -->
         </p>
         <p>Search by position:<br>
            Start<input type="number" name="start_search"></input>&nbsp;&nbsp;&nbsp;&nbsp;End

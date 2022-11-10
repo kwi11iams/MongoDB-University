@@ -33,17 +33,20 @@ def searchdb():
     chr_options = [int(x) for x in chr_options]
     chr_options = sorted(chr_options)
     chr_options = [str(x) for x in chr_options]
+    # Most severe consequence options
+    consequence = mongo.db.variants.distinct("most_severe_consequence")
 
     if request.method == "POST":
-        var_cons = request.form["variant_consequence_search"]
+        var_type = request.form["variant_type_search"]
         chrom = request.form["chromosome_search"]
         rsID = request.form["rsID"]
+        var_cons = request.form["var_cons"]
         start = request.form["start_search"]
         end = request.form["end_search"]
 
         q_dict = {}
-        if var_cons and var_cons != "NULL":
-            q_dict["var_class"] = var_cons
+        if var_type and var_type != "NULL":
+            q_dict["var_class"] = var_type
         else: pass
 
         if chrom and chrom != "NULL":
@@ -52,6 +55,10 @@ def searchdb():
 
         if rsID:
             q_dict["name"] = rsID
+        else: pass
+
+        if var_cons and var_cons != "NULL":
+            q_dict["most_severe_consequence"] = var_cons
         else: pass
 
         if start and end:
@@ -69,7 +76,9 @@ def searchdb():
     return render_template('search.html',
                             r=query,
                             var_classes=var_classes,
-                            chr_options=chr_options)
+                            chr_options=chr_options,
+                            var_cons=consequence,
+                            )
 
 @app.route('/variant/<ObjectId:oid>')
 def getvar(oid):
