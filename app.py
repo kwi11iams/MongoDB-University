@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, url_for, redirect
 from flask_pymongo import PyMongo
+from bson.objectid import ObjectId
 
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/variantsdb"
@@ -75,13 +76,12 @@ def searchdb():
                             var_cons=consequence,
                             )
 
-# class variant_form(FlaskForm):
-#     def __init__():
-#         ObjectId = StringField('ID')
-#         source = StringField('source')
-#         name = StringField('rsID')
-
 @app.route('/variant/<ObjectId:oid>')
 def getvar(oid):
     record = mongo.db.variants.find_one_or_404(oid)
     return render_template('single_variant.html', variant = record)
+
+@app.route('/edit/<ObjectId:oid>', methods=('POST','GET'))
+def editvar(oid):  
+    record = mongo.db.variants.find_one_or_404(oid)
+    return render_template('edit_variant.html', variant=record)
