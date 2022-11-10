@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block content %} 
+{% block content %}
 
 <body>
     <h1>VariantsDB search page</h1>
@@ -31,6 +31,7 @@
             <th>Chromosome</th>
             <th>Start</th>
             <th>End</th>
+            <th>Action</th>
           </tr>
         </thead>
         {% if r %}
@@ -43,19 +44,18 @@
               <td>{{ variant.mappings[0].seq_region_name }}</td>
               <td>{{ variant.mappings[0].start }}</td>
               <td>{{ variant.mappings[0].end }}</td>
+              <td><button class="btn-view" type="button">Edit</button></td>
             </tr>
         </tbody>
         {% endfor %}
         {% endif %}
-      </table>   
+      </table>
 </body>
-{% endblock %} 
+{% endblock %}
 
 {% block scripts %}
   <script>
     $(document).ready(function () {
       $('#data').DataTable();
-    });
   </script>
 {% endblock %}
-
