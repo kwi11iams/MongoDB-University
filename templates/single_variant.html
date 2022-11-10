@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %} 
+Variant Summary:
 <table id="data" class="table table-striped">
   <thead>
     <tr>
@@ -53,7 +54,8 @@
     $(document).ready(function () {
       $('#data').DataTable({
         "bFilter": false,
-        "bPaginate": false
+        "bPaginate": false,
+        "bInfo" : false
      });      
     });
   </script>

@@ -1,20 +1,118 @@
 {% extends 'base.html' %}
 {% block content %}
+<style>
+  * {
+    box-sizing: border-box;
+  }
+  
+  input[type=text], select, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+  }
+
+  input[type=number], select, textarea {
+    width: 10%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+  }
+  
+  label {
+    padding: 12px 12px 12px 0;
+    display: inline-block;
+  }
+  
+  input[type=submit] {
+    background-color: #04AA6D;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    float: right;
+  }
+  
+  input[type=submit]:hover {
+    background-color: #45a049;
+  }
+  
+  .container {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+  }
+  
+  .col-25 {
+    float: left;
+    width: 25%;
+    margin-top: 6px;
+  }
+  
+  .col-75 {
+    float: left;
+    width: 75%;
+    margin-top: 6px;
+  }
+  
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  
+  /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+  @media screen and (max-width: 600px) {
+    .col-25, .col-75, input[type=submit] {
+      width: 100%;
+      margin-top: 0;
+    }
+  }
+  </style>
 
 <body>
     <h1>VariantsDB search page</h1>
     <form method="POST">
         <p>
-            <p>Search by variant type</p>
-            <input type="text" name="variant_consequence_search"></input>
+            <p>Search by variant type:
+            <select name="variant_type_search">
+                <option value="NULL">-- select option --</option>
+                {% for v in var_classes %}
+                    <option value="{{v}}">{{v}}</option>
+                {% endfor %}
+            </select>
+            </p>
         </p>
         <p>
-            <p>Search by chromosome:</p>
-            <input type="number" name="chromosome_search"></input>
+            <p> Search by chromosome:
+            <select name="chromosome_search">
+              <option value="NULL">-- select option --</option>
+                {% for c in chr_options %}
+                    <option value="{{c}}">{{c}}</option>
+                {% endfor %}
+            </select>
+            </p>
+            <!-- <input type="number" name="chromosome_search"></input> -->
+        </p>
+        <p> Search by rsID: <input name="rsID"></input></p>
         </p>
         <p>
-          Search by position:
-          <p>Start<input type="number" name="start_search"></input>&nbsp;&nbsp;&nbsp;&nbsp;End<input type="number" name="end_search"></input></p>
+            <p>Search by most severe consequence:
+            <select name="var_cons">
+              <option value="NULL">-- select option --</option>
+                {% for cons in var_cons %}
+                    <option value="{{cons}}">{{cons}}</option>
+                {% endfor %}
+            </select>
+            </p>
+            <!-- <input type="number" name="chromosome_search"></input> -->
+        </p>
+        <p>Search by position:<br>
+           Start: <input type="number" name="start_search" min="0"></input>&nbsp;&nbsp;&nbsp;&nbsp; End: <input type="number" name="end_search" min="0"></input>
         </p>
         <p>
             <button type="submit">Submit</button>
@@ -27,6 +125,7 @@
           <tr>
             <th>Name</th>
             <th>HGVS</th>
+            <th>Variant Type</th>
             <th>Assembly</th>
             <th>Chromosome</th>
             <th>Start</th>
@@ -40,12 +139,13 @@
             <tr>
               <td>{{ variant.name }}</td>
               <td>{{ variant.synonyms[0] }}</td>
+              <td>{{ variant.var_class }}</td>
               <td>{{ variant.mappings[0].assembly_name }}</td>
               <td>{{ variant.mappings[0].seq_region_name }}</td>
               <td>{{ variant.mappings[0].start }}</td>
               <td>{{ variant.mappings[0].end }}</td>
               <td>
-                <a class="btn btn-primary" href="/variant/{{variant._id}}">Edit</a>
+                <a class="btn btn-primary" href="/variant/{{variant._id}}">View</a>
               </td>
             </tr>
         </tbody>
@@ -59,5 +159,6 @@
   <script>
     $(document).ready(function () {
       $('#data').DataTable();
+    })
   </script>
 {% endblock %}
