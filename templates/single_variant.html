@@ -21,11 +21,29 @@
     </tr>
   </tbody>
 </table>
-<pre>
+<!-- <pre>
 <code>
     {{variant}}
 </code>
-</pre>
+</pre> -->
+
+<form method="POST" action="/">
+  <p> ID: <input type="text" value="{{ variant._id }}"></input></p>
+  <p> source: <input type="text" value="{{ variant.source }}"></input></p>
+  <p> mappings: <input type="text" value="{{ variant.mappings }}"></input></p>
+  <p> name: <input type="text" value="{{ variant.name }}"></input></p>
+  <p> MAF: <input type="text" value="{{ variant.MAF }}"></input></p>
+  <p> ambiguity: <input type="text" value="{{ variant.ambiguity }}"></input></p>
+  <p> var_class: <input type="text" value="{{ variant.var_class }}"></input></p>
+  <p> synonyms: <input type="text" value="{{ variant.synonyms }}"></input></p>
+  <p> evidence: <input type="text" value="{{ variant.evidence }}"></input></p>
+  <p> ancestral_allele: <input type="text" value="{{ variant.ancestral_allele }}"></input></p>
+  <p> minor_allele: <input type="text" value="{{ variant.minor_allele }}"></input></p>
+  <p> most_severe_consequence: <input type="text" value="{{ variant.most_severe_consequence }}"></input></p>
+  
+  
+ </form> 
+
 {% endblock %} 
 
 {% block scripts %}
