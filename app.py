@@ -1,7 +1,10 @@
 from flask import Flask, render_template, request, url_for, redirect
 from pymongo import MongoClient
+from flask_pymongo import PyMongo
 
 app = Flask(__name__)
+app.config["MONGO_URI"] = "mongodb://localhost:27017/variantsdb"
+mongo = PyMongo(app)
 client = MongoClient('localhost', 27017)
 db = client.variantsdb
 variants = db.variants
@@ -53,7 +56,10 @@ def searchdb():
         query = None
     return render_template('search.html', r=query)
 
-@app.route('/variant/<oid>')
+@app.route('/variant/<ObjectId:oid>')
 def getvar(oid):
-    record = variants.find({"_id":f"ObjectID('{oid}')"})
-    return render_template(single_variant.html, variant = record)
+    q = {"_id":oid}
+    print(q)
+    record = mongo.db.variants.find_one_or_404(oid)
+    print(list(record))
+    return render_template('single_variant.html', variant = record)
