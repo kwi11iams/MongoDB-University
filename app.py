@@ -20,7 +20,6 @@ def viewdb():
     record = variants.find()
     return render_template('datatable.html', r = record)
 
-
 @app.route('/search', methods=('GET', 'POST'))
 def searchdb():
 
@@ -33,19 +32,18 @@ def searchdb():
         q_dict = {}
         if var_cons:
             q_dict["var_class"] = var_cons
-        else:
-            q_dict["var_class"] = ""
+        else: pass
 
 
         if chrom: 
             q_dict["mappings.0.seq_region_name"] = chrom
-        else:
-            q_dict["mappings.0.seq_region_name"] = ""
+        else: pass
 
         if start and end:
             q_dict["mappings.0.start"] = {"$gte": int(start)}
             
             q_dict["mappings.0.end"] = {"$lte": int(end)}
+        else: pass
             
         print(q_dict)
         query = variants.find(q_dict)
@@ -54,3 +52,8 @@ def searchdb():
     else:
         query = None
     return render_template('search.html', r=query)
+
+@app.route('/variant/<oid>')
+def getvar(oid):
+    record = variants.find({"_id":f"ObjectID('{oid}')"})
+    return render_template(single_variant.html, variant = record)
