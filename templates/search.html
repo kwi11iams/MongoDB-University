@@ -44,7 +44,9 @@
               <td>{{ variant.mappings[0].seq_region_name }}</td>
               <td>{{ variant.mappings[0].start }}</td>
               <td>{{ variant.mappings[0].end }}</td>
-              <td><button class="btn-view" type="button">Edit</button></td>
+              <td>
+                <a class="btn btn-primary" href="/{{variant._id}}">Edit</a>
+              </td>
             </tr>
         </tbody>
         {% endfor %}
