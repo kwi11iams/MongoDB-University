@@ -31,7 +31,10 @@
 {% block scripts %}
   <script>
     $(document).ready(function () {
-      $('#data').DataTable();
+      $('#data').DataTable({
+        "bFilter": false,
+        "bPaginate": false
+     });      
     });
   </script>
 {% endblock %}
