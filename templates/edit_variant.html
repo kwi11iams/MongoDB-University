@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %} 
+<table id="data" class="table table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Assembly</th>
+      <th>Chromosome</th>
+      <th>Start</th>
+      <th>End</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+    <td>{{ variant.name }}</td>
+    <td>{{ variant.mappings[0].assembly_name }}</td>
+    <td>{{ variant.mappings[0].seq_region_name }}</td>
+    <td>{{ variant.mappings[0].start }}</td>
+    <td>{{ variant.mappings[0].end }}</td>
+    </tr>
+  </tbody>
+</table>
+<!-- <pre>
+<code>
+    {{variant}}
+</code>
+</pre> -->
+
+<form method="POST">
+  <p> ID: <input type="text" name="ID" value="{{ variant._id }}"></input></p>
+  <p> source: <input type="text" name="source" value="{{ variant.source }}"></input></p>
+  <p> mappings: </p>
+  <p> position: &nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="position" value="{{ variant.mappings.0.location }}"></input></p>
+  <p> Assembly: &nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="assembly" value="{{ variant.mappings.0.assembly_name }}"></input></p>
+  <p> Chromosome: &nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="chrom" value="{{ variant.mappings.0.seq_region_name }}"></input></p>
+  <p> strand: &nbsp;&nbsp;&nbsp;&nbsp;<input type="number" name="strand" value="{{ variant.mappings.0.strand }}"></input></p>
+  <p> name: <input type="text" name="name" value="{{ variant.name }}"></input></p>
+  <p> MAF: <input type="text"name="MAF" value="{{ variant.MAF }}"></input></p>
+  <p> ambiguity: <input type="text" name="ambiguity" value="{{ variant.ambiguity }}"></input></p>
+  <p> var_class: <input type="text" name="var_class" value="{{ variant.var_class }}"></input></p>
+  <p> synonyms: <textarea type="text" name="synonyms" cols="40" rows="5">{{ variant.synonyms }}</textarea></p>
+  <p> evidence: <textarea type="text" name="evidence" cols="40" rows="5">{{ variant.evidence }}</textarea></p>
+  <p> ancestral_allele: <input type="text" name="a_allele" value="{{ variant.ancestral_allele }}"></input></p>
+  <p> minor_allele: <input type="text" name="min_allele" value="{{ variant.minor_allele }}"></input></p>
+  <p> most_severe_consequence: <input type="text" name="consequence" value="{{ variant.most_severe_consequence }}"></input></p>
+  <button type="submit">Submit</button>
+ </form> 
+
+{% endblock %} 
+
+{% block scripts %}
+  <script>
+    $(document).ready(function () {
+      $('#data').DataTable({
+        "bFilter": false,
+        "bPaginate": false
+     });      
+    });
+  </script>
+{% endblock %}
