@@ -1,9 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>VariantsDB search</title>
-</head>
+{% extends 'base.html' %}
+{% block content %} 
+
 <body>
     <h1>VariantsDB search page</h1>
     <form method="POST">
@@ -16,14 +13,49 @@
             <input type="number" name="chromosome_search"></input>
         </p>
         <p>
+          Search by position:
+          <input type="number" name="start_search">Start</input> <input type="number" name="end_search">End</input>
+        </p>
+        <p>
             <button type="submit">Submit</button>
         </p>
 
     </form>
     <hr>
-    {% for r in records %}
-        <div class="result">
-            <p>{{r}}</p>
-        </div>
-    {% endfor %}       
+    <table id="data" class="table table-striped">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>HGVS</th>
+            <th>Assembly</th>
+            <th>Chromosome</th>
+            <th>Start</th>
+            <th>End</th>
+          </tr>
+        </thead>
+        {% if r %}
+        {% for variant in r %}
+        <tbody>
+            <tr>
+              <td>{{ variant.name }}</td>
+              <td>{{ variant.synonyms[0] }}</td>
+              <td>{{ variant.mappings[0].assembly_name }}</td>
+              <td>{{ variant.mappings[0].seq_region_name }}</td>
+              <td>{{ variant.mappings[0].start }}</td>
+              <td>{{ variant.mappings[0].end }}</td>
+            </tr>
+        </tbody>
+        {% endfor %}
+        {% endif %}
+      </table>   
 </body>
+{% endblock %} 
+
+{% block scripts %}
+  <script>
+    $(document).ready(function () {
+      $('#data').DataTable();
+    });
+  </script>
+{% endblock %}
+
