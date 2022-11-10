@@ -1,0 +1,4 @@
+Flask==2.2.2
+Python==3.8.10
+Werkseug==2.2.2
+Flask-PyMongo==2.3.0
