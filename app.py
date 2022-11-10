@@ -76,8 +76,15 @@ def searchdb():
                             var_cons=consequence,
                             )
 
-@app.route('/variant/<ObjectId:oid>')
-def getvar(oid):
+@app.route('/variant/<ObjectId:oid>', methods=('POST','GET'))
+def getvar(oid):    
+
+
+    record = mongo.db.variants.find_one_or_404(oid)
+    return render_template('single_variant.html', variant = record)
+
+@app.route('/edit/<ObjectId:oid>', methods=('POST','GET'))
+def editvar(oid):
     if request.method == "POST":
         q_dict = {}
         q_dict["source"] = request.form["source"]
@@ -95,11 +102,10 @@ def getvar(oid):
         q_dict["minor_allele"] = request.form["min_allele"]
         q_dict["consequence"] = request.form["consequence"]
         o_id = ObjectId(f'{oid}')
+        
         mongo.db.variants.update_one({"_id":o_id},{"$set": q_dict})
-    record = mongo.db.variants.find_one_or_404(oid)
-    return render_template('single_variant.html', variant = record)
+        record = mongo.db.variants.find_one_or_404(oid)
 
-@app.route('/edit/<ObjectId:oid>', methods=('POST','GET'))
-def editvar(oid):  
+        return render_template('single_variant.html', variant=record )
     record = mongo.db.variants.find_one_or_404(oid)
     return render_template('edit_variant.html', variant=record)
