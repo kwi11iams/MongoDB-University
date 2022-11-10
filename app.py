@@ -8,7 +8,7 @@ mongo = PyMongo(app)
 
 @app.route('/', methods=('GET', 'POST'))
 def home():
-    return render_template('base.html')
+    return render_template('home.html')
 
 @app.route('/add', methods=('GET', 'POST'))
 def add():
