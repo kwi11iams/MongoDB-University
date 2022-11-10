@@ -1,5 +1,9 @@
 from flask import Flask, render_template, request, url_for, redirect
 from flask_pymongo import PyMongo
+from flask_wtf import FlaskForm
+from wtforms import (StringField, TextAreaField, IntegerField, BooleanField,
+                     RadioField)
+from wtforms.validators import InputRequired, Length
 
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/variantsdb"
@@ -33,14 +37,12 @@ def searchdb():
             q_dict["var_class"] = var_cons
         else: pass
 
-
         if chrom: 
             q_dict["mappings.0.seq_region_name"] = chrom
         else: pass
 
         if start and end:
-            q_dict["mappings.0.start"] = {"$gte": int(start)}
-            
+            q_dict["mappings.0.start"] = {"$gte": int(start)}            
             q_dict["mappings.0.end"] = {"$lte": int(end)}
         else: pass
             
@@ -52,8 +54,13 @@ def searchdb():
         query = None
     return render_template('search.html', r=query)
 
+# class variant_form(FlaskForm):
+#     def __init__():
+#         ObjectId = StringField('ID')
+#         source = StringField('source')
+#         name = StringField('rsID')
+
 @app.route('/variant/<ObjectId:oid>')
 def getvar(oid):
-    q = {"_id":oid}
     record = mongo.db.variants.find_one_or_404(oid)
     return render_template('single_variant.html', variant = record)
