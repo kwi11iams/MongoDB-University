@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %} 
+Variant Summary:
 <table id="data" class="table table-striped">
   <thead>
     <tr>
@@ -26,20 +27,95 @@
     {{variant}}
 </code>
 </pre> -->
+<style>
+  * {
+    box-sizing: border-box;
+  }
+  
+  input[type=text], select, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+  }
+
+  input[type=number], select, textarea {
+    width: 10%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+  }
+  
+  label {
+    padding: 12px 12px 12px 0;
+    display: inline-block;
+  }
+  
+  input[type=submit] {
+    background-color: #04AA6D;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    float: right;
+  }
+  
+  input[type=submit]:hover {
+    background-color: #45a049;
+  }
+  
+  .container {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+  }
+  
+  .col-25 {
+    float: left;
+    width: 25%;
+    margin-top: 6px;
+  }
+  
+  .col-75 {
+    float: left;
+    width: 75%;
+    margin-top: 6px;
+  }
+  
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  
+  /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+  @media screen and (max-width: 600px) {
+    .col-25, .col-75, input[type=submit] {
+      width: 100%;
+      margin-top: 0;
+    }
+  }
+  </style>
 
 <form method="POST" action="/">
   <p> ID: <input type="text" value="{{ variant._id }}"></input></p>
   <p> source: <input type="text" value="{{ variant.source }}"></input></p>
-  <p> mappings: <input type="text" value="{{ variant.mappings }}"></input></p>
-  <p> name: <input type="text" value="{{ variant.name }}"></input></p>
+  <p> Mappings:</p>
+  <p> Assembly: <input type="text" value="{{ variant.mappings[0].assembly_name }}"></input>
+  <p>Chromosome: <input type="number" value="{{ variant.mappings[0].seq_region_name }}"></input>&nbsp;&nbsp;&nbsp;&nbsp; Start: <input type="number" value="{{ variant.mappings[0].start }}"></input>&nbsp;&nbsp;&nbsp;&nbsp; End: <input type="number" value="{{ variant.mappings[0].end }}"></input></p>
+  <p> RS number: <input type="text" value="{{ variant.name }}" id="ex3"></input></p>
   <p> MAF: <input type="text" value="{{ variant.MAF }}"></input></p>
-  <p> ambiguity: <input type="text" value="{{ variant.ambiguity }}"></input></p>
-  <p> var_class: <input type="text" value="{{ variant.var_class }}"></input></p>
-  <p> synonyms: <input type="text" value="{{ variant.synonyms }}"></input></p>
-  <p> evidence: <input type="text" value="{{ variant.evidence }}"></input></p>
-  <p> ancestral_allele: <input type="text" value="{{ variant.ancestral_allele }}"></input></p>
-  <p> minor_allele: <input type="text" value="{{ variant.minor_allele }}"></input></p>
-  <p> most_severe_consequence: <input type="text" value="{{ variant.most_severe_consequence }}"></input></p>
+  <p> Ambiguity: <input type="text" value="{{ variant.ambiguity }}"></input></p>
+  <p> Variant Class: <input type="text" value="{{ variant.var_class }}"></input></p>
+  <p> Synonyms: <input type="text" value="{{ variant.synonyms }}"></input></p>
+  <p> Evidence: <input type="text" value="{{ variant.evidence }}"></input></p>
+  <p> Ancestral allele: <input type="text" value="{{ variant.ancestral_allele }}"></input></p>
+  <p> Minor allele: <input type="text" value="{{ variant.minor_allele }}"></input></p>
+  <p> Most severe consequence: <input type="text" value="{{ variant.most_severe_consequence }}"></input></p>
   
   
  </form> 
@@ -51,7 +127,8 @@
     $(document).ready(function () {
       $('#data').DataTable({
         "bFilter": false,
-        "bPaginate": false
+        "bPaginate": false,
+        "bInfo" : false
      });      
     });
   </script>
