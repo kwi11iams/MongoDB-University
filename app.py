@@ -37,6 +37,7 @@ def searchdb():
     if request.method == "POST":
         var_cons = request.form["variant_consequence_search"]
         chrom = request.form["chromosome_search"]
+        rsID = request.form["rsID"]
         start = request.form["start_search"]
         end = request.form["end_search"]
 
@@ -45,9 +46,12 @@ def searchdb():
             q_dict["var_class"] = var_cons
         else: pass
 
-
         if chrom and chrom != "NULL":
             q_dict["mappings.0.seq_region_name"] = chrom
+        else: pass
+
+        if rsID:
+            q_dict["name"] = rsID
         else: pass
 
         if start and end:
