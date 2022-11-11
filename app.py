@@ -140,6 +140,14 @@ def editvar(oid):
         q_dict["consequence"] = request.form["consequence"]
         o_id = ObjectId(f'{oid}')
 
+        # Check chromosome is valid
+        chrom_poss = list(range(1,22))
+        chrom_poss = [str(x) for x in chrom_poss]
+        chrom_poss.append(['X', 'Y'])
+        if request.form["chrom"] not in chrom_poss:
+            flash('Chromosome entry not valid, edits rejected and not saved.')
+            return redirect(url_for('editvar', oid=o_id))
+
         # Update variant in MongoDB using the query dictionary
         mongo.db.variants.update_one({"_id":o_id},{"$set": q_dict})
         record = mongo.db.variants.find_one_or_404(oid)
