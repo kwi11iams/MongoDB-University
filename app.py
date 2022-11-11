@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, url_for, redirect
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
+import re
 
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/variantsdb"
@@ -14,6 +15,7 @@ def home():
     '''
     return render_template('home.html')
 
+
 @app.route('/view', methods=('GET', 'POST'))
 def viewdb():
     '''
@@ -22,6 +24,7 @@ def viewdb():
     '''
     record = mongo.db.variants.find()
     return render_template('datatable.html', r = record)
+
 
 @app.route('/search', methods=('GET', 'POST'))
 def searchdb():
@@ -33,9 +36,10 @@ def searchdb():
     var_classes = mongo.db.variants.distinct("var_class")
     # Chr options
     chr_options = mongo.db.variants.distinct("mappings.0.seq_region_name")
-    chr_options = [int(x) for x in chr_options]
-    chr_options = sorted(chr_options)
-    chr_options = [str(x) for x in chr_options]
+    convert = lambda text: int(text) if text.isdigit() else text
+    alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key) ]
+    chr_options = sorted(chr_options, key = alphanum_key)
+
     # Most severe consequence options
     consequence = mongo.db.variants.distinct("most_severe_consequence")
 
@@ -69,14 +73,14 @@ def searchdb():
             q_dict["mappings.0.start"] = {"$gte": int(start)}
             q_dict["mappings.0.end"] = {"$lte": int(end)}
         else: pass
-      
+
         # Submit query to MongoDB database
         query = mongo.db.variants.find(q_dict)
         query = query.limit(20)
 
     else:
         query = None
-    
+
     # Render results on /search page
     return render_template('search.html',
                             r=query,
@@ -85,14 +89,16 @@ def searchdb():
                             var_cons=consequence,
                             )
 
+
 @app.route('/variant/<ObjectId:oid>', methods=('POST','GET'))
-def getvar(oid):    
+def getvar(oid):
     '''
     Display a single variant from MongoDB database in a table
     The url is the unique object ID for the variant
     '''
     record = mongo.db.variants.find_one_or_404(oid)
     return render_template('single_variant.html', variant = record)
+
 
 @app.route('/edit/<ObjectId:oid>', methods=('POST','GET'))
 def editvar(oid):
@@ -118,11 +124,11 @@ def editvar(oid):
         q_dict["minor_allele"] = request.form["min_allele"]
         q_dict["consequence"] = request.form["consequence"]
         o_id = ObjectId(f'{oid}')
-        
+
         # Update variant in MongoDB using the query dictionary
         mongo.db.variants.update_one({"_id":o_id},{"$set": q_dict})
         record = mongo.db.variants.find_one_or_404(oid)
-        
+
         # Redirect to variant page to display output
         return redirect(url_for('getvar', oid=oid))
 
