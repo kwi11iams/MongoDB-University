@@ -8,12 +8,14 @@ app.secret_key='2049'
 app.config["MONGO_URI"] = "mongodb://localhost:27017/variantsdb"
 mongo = PyMongo(app)
 
+
 @app.route('/', methods=('GET', 'POST'))
 def home():
     '''
     render homepage usine home.html template
     '''
     return render_template('home.html')
+
 
 @app.route('/view', methods=('GET', 'POST'))
 def viewdb():
@@ -43,11 +45,8 @@ def searchdb():
     consequence = mongo.db.variants.distinct("most_severe_consequence")
 
     if request.method == "POST":
-<<<<<<< HEAD
-=======
 
         # Accept querys from form on web page and add them to a dictionary
->>>>>>> d6e0d30fad2bc529ed924666b96951ee4fc94040
         var_type = request.form.getlist("variant_type_search")
         chrom = request.form["chromosome_search"]
         rsID = request.form["rsID"]
@@ -89,7 +88,7 @@ def searchdb():
 
         # Submit query to MongoDB database
         if q_dict["$and"] == []:
-            q_dict.pop("$and", None)
+            q_dict.pop("$and",None)
         print(q_dict)
         query = mongo.db.variants.find(q_dict)
         count = mongo.db.variants.count_documents(q_dict)
@@ -143,10 +142,6 @@ def editvar(oid):
         q_dict["minor_allele"] = request.form["min_allele"]
         q_dict["consequence"] = request.form["consequence"]
         o_id = ObjectId(f'{oid}')
-<<<<<<< HEAD
-        mongo.db.variants.update_one({"_id":o_id},{"$set": q_dict})
-        record = mongo.db.variants.find_one_or_404(oid)
-=======
 
         # Check chromosome is valid
         chrom_poss = list(range(1,22))
@@ -161,7 +156,6 @@ def editvar(oid):
         record = mongo.db.variants.find_one_or_404(oid)
 
         # Redirect to variant page to display output
->>>>>>> d6e0d30fad2bc529ed924666b96951ee4fc94040
         return redirect(url_for('getvar', oid=oid))
 
     # Display current variant, even if not changed
