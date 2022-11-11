@@ -2,7 +2,7 @@
 MongoDB project for group University work
 
 ## Tests ran
-### Identiyfing a unique ID
+### Identifying a unique ID
 The following code snippet was ran to determine if the rs numbers for the variants were unique.
 ```
 db.variants.aggregate([
@@ -24,3 +24,5 @@ db.variants.aggregate([
 ]
 ```
 As they were not all unique, variant urls were generated using the ObjectID which is a unique value for each variant
+### Adding X or Y chromosomes
+All the variants already in the database have numerical chromosomes. The chromosome field was edited to take both integers and strings, and list both alphanumerically.
