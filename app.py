@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request, url_for, redirect
+from flask import Flask, render_template, request, url_for, redirect, flash
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 import re
 
 app = Flask(__name__)
+app.secret_key = "super secret key"
 app.config["MONGO_URI"] = "mongodb://localhost:27017/variantsdb"
 mongo = PyMongo(app)
 
@@ -124,6 +125,14 @@ def editvar(oid):
         q_dict["minor_allele"] = request.form["min_allele"]
         q_dict["consequence"] = request.form["consequence"]
         o_id = ObjectId(f'{oid}')
+
+        # Check chromosome is valid
+        chrom_poss = list(range(1,22))
+        chrom_poss = [str(x) for x in chrom_poss]
+        chrom_poss.append(['X', 'Y'])
+        if request.form["chrom"] not in chrom_poss:
+            flash('Chromosome entry not valid, edits rejected and not saved.')
+            return redirect(url_for('editvar', oid=o_id))
 
         # Update variant in MongoDB using the query dictionary
         mongo.db.variants.update_one({"_id":o_id},{"$set": q_dict})
