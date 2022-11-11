@@ -43,6 +43,11 @@ def searchdb():
     consequence = mongo.db.variants.distinct("most_severe_consequence")
 
     if request.method == "POST":
+<<<<<<< HEAD
+=======
+
+        # Accept querys from form on web page and add them to a dictionary
+>>>>>>> d6e0d30fad2bc529ed924666b96951ee4fc94040
         var_type = request.form.getlist("variant_type_search")
         chrom = request.form["chromosome_search"]
         rsID = request.form["rsID"]
@@ -83,9 +88,12 @@ def searchdb():
         else: pass
 
         # Submit query to MongoDB database
+        if q_dict["$and"] == []:
+            q_dict.pop("$and", None)
+        print(q_dict)
         query = mongo.db.variants.find(q_dict)
-        count = mongo.db.variants.count(q_dict)
-        print(count)
+        count = mongo.db.variants.count_documents(q_dict)
+        
         flash(f"Query returned {count} records",'info')
         query = query.limit(200)
 
@@ -135,8 +143,25 @@ def editvar(oid):
         q_dict["minor_allele"] = request.form["min_allele"]
         q_dict["consequence"] = request.form["consequence"]
         o_id = ObjectId(f'{oid}')
+<<<<<<< HEAD
         mongo.db.variants.update_one({"_id":o_id},{"$set": q_dict})
         record = mongo.db.variants.find_one_or_404(oid)
+=======
+
+        # Check chromosome is valid
+        chrom_poss = list(range(1,22))
+        chrom_poss = [str(x) for x in chrom_poss]
+        chrom_poss.append(['X', 'Y'])
+        if request.form["chrom"] not in chrom_poss:
+            flash('Chromosome entry not valid, edits rejected and not saved.')
+            return redirect(url_for('editvar', oid=o_id))
+
+        # Update variant in MongoDB using the query dictionary
+        mongo.db.variants.update_one({"_id":o_id},{"$set": q_dict})
+        record = mongo.db.variants.find_one_or_404(oid)
+
+        # Redirect to variant page to display output
+>>>>>>> d6e0d30fad2bc529ed924666b96951ee4fc94040
         return redirect(url_for('getvar', oid=oid))
 
     # Display current variant, even if not changed
