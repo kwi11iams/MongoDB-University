@@ -9,6 +9,7 @@
       <th>Chromosome</th>
       <th>Start</th>
       <th>End</th>
+      <th>More details</th>
     </tr>
   </thead>
   <tbody>
@@ -19,6 +20,9 @@
         <td>{{ variant.mappings[0].seq_region_name }}</td>
         <td>{{ variant.mappings[0].start }}</td>
         <td>{{ variant.mappings[0].end }}</td>
+        <td>
+          <a class="btn btn-primary" href="/variant/{{variant._id}}">View</a>
+        </td>
       </tr>
     {% endfor %}
   </tbody>
