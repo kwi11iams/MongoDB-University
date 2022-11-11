@@ -122,8 +122,9 @@ def editvar(oid):
         # Update variant in MongoDB using the query dictionary
         mongo.db.variants.update_one({"_id":o_id},{"$set": q_dict})
         record = mongo.db.variants.find_one_or_404(oid)
-        # Display output
-        return render_template('single_variant.html', variant=record )
+        
+        # Redirect to variant page to display output
+        return redirect(url_for('getvar', oid=oid))
 
     # Display current variant, even if not changed
     record = mongo.db.variants.find_one_or_404(oid)
