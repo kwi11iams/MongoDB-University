@@ -9,20 +9,26 @@ mongo = PyMongo(app)
 
 @app.route('/', methods=('GET', 'POST'))
 def home():
+    '''
+    render homepage usine home.html template
+    '''
     return render_template('home.html')
-
-@app.route('/add', methods=('GET', 'POST'))
-def add():
-    return render_template('add.html')
 
 @app.route('/view', methods=('GET', 'POST'))
 def viewdb():
+    '''
+    View the whole MongoDB database in /view page.
+    The variants are shown in a paginated, searchable table.
+    '''
     record = mongo.db.variants.find()
     return render_template('datatable.html', r = record)
 
 @app.route('/search', methods=('GET', 'POST'))
 def searchdb():
-
+    '''
+    Search the database. The variants can be filtered based on various
+    attributes.
+    '''
     # Var class options
     var_classes = mongo.db.variants.distinct("var_class")
     # Chr options
@@ -34,6 +40,7 @@ def searchdb():
     consequence = mongo.db.variants.distinct("most_severe_consequence")
 
     if request.method == "POST":
+        # Accept querys from form on web page and add them to a dictionary
         var_type = request.form["variant_type_search"]
         chrom = request.form["chromosome_search"]
         rsID = request.form["rsID"]
@@ -62,13 +69,15 @@ def searchdb():
             q_dict["mappings.0.start"] = {"$gte": int(start)}
             q_dict["mappings.0.end"] = {"$lte": int(end)}
         else: pass
-
-        print(q_dict)
+      
+        # Submit query to MongoDB database
         query = mongo.db.variants.find(q_dict)
         query = query.limit(20)
 
     else:
         query = None
+    
+    # Render results on /search page
     return render_template('search.html',
                             r=query,
                             var_classes=var_classes,
@@ -78,14 +87,21 @@ def searchdb():
 
 @app.route('/variant/<ObjectId:oid>', methods=('POST','GET'))
 def getvar(oid):    
-
-
+    '''
+    Display a single variant from MongoDB database in a table
+    The url is the unique object ID for the variant
+    '''
     record = mongo.db.variants.find_one_or_404(oid)
     return render_template('single_variant.html', variant = record)
 
 @app.route('/edit/<ObjectId:oid>', methods=('POST','GET'))
 def editvar(oid):
+    '''
+    Edit a single variant from the MongoDB database and display the edited
+    variant
+    '''
     if request.method == "POST":
+        # Extract changes from form and add to query dictionary
         q_dict = {}
         q_dict["source"] = request.form["source"]
         q_dict["mappings.0.location"] = request.form["position"]
@@ -103,9 +119,12 @@ def editvar(oid):
         q_dict["consequence"] = request.form["consequence"]
         o_id = ObjectId(f'{oid}')
         
+        # Update variant in MongoDB using the query dictionary
         mongo.db.variants.update_one({"_id":o_id},{"$set": q_dict})
         record = mongo.db.variants.find_one_or_404(oid)
-
+        # Display output
         return render_template('single_variant.html', variant=record )
+
+    # Display current variant, even if not changed
     record = mongo.db.variants.find_one_or_404(oid)
     return render_template('edit_variant.html', variant=record)
