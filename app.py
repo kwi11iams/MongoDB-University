@@ -88,7 +88,7 @@ def searchdb():
 
         # Submit query to MongoDB database
         query = mongo.db.variants.find(q_dict)
-        count = mongo.db.variants.count(q_dict)
+        count = mongo.db.variants.count_documents(q_dict)
         print(count)
         flash(f"Query returned {count} records",'info')
         query = query.limit(200)
