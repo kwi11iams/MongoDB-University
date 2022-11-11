@@ -25,4 +25,4 @@ db.variants.aggregate([
 ```
 As they were not all unique, variant urls were generated using the ObjectID which is a unique value for each variant
 ### Adding X or Y chromosomes
-All the variants already in the database have numerical chromosomes. The chromosome field was edited to take both integers and strings, and list both alphanumerically.
+All the variants already in the database have numerical chromosomes. The chromosome field was edited to take both integers and strings, and list both alphanumerically. A check was added to ensure that the chromosome had a valid value (1-22, X and Y) before allowing the user to submit it.
