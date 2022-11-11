@@ -87,9 +87,12 @@ def searchdb():
         else: pass
 
         # Submit query to MongoDB database
+        if q_dict["$and"] == []:
+            q_dict.pop("$and",None)
+        print(q_dict)
         query = mongo.db.variants.find(q_dict)
         count = mongo.db.variants.count_documents(q_dict)
-        print(count)
+        
         flash(f"Query returned {count} records",'info')
         query = query.limit(200)
 
