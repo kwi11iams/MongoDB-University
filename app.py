@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request, url_for, redirect
+from flask import Flask, render_template, request, url_for, redirect, flash
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 import re
 
 app = Flask(__name__)
+app.secret_key='2049'
 app.config["MONGO_URI"] = "mongodb://localhost:27017/variantsdb"
 mongo = PyMongo(app)
 
@@ -44,18 +45,24 @@ def searchdb():
     consequence = mongo.db.variants.distinct("most_severe_consequence")
 
     if request.method == "POST":
+
         # Accept querys from form on web page and add them to a dictionary
-        var_type = request.form["variant_type_search"]
+        var_type = request.form.getlist("variant_type_search")
         chrom = request.form["chromosome_search"]
         rsID = request.form["rsID"]
-        var_cons = request.form["var_cons"]
+        var_cons = request.form.getlist("var_cons")
         start = request.form["start_search"]
         end = request.form["end_search"]
 
         q_dict = {}
+        q_dict["$and"] = []
         if var_type and var_type != "NULL":
-            q_dict["var_class"] = var_type
-        else: pass
+            or_qdict = {}
+            or_qdict["$or"] = []
+            for i in var_type:
+                q = {"var_class":i}
+                or_qdict["$or"].append(q)
+            q_dict["$and"].append(or_qdict)
 
         if chrom and chrom != "NULL":
             q_dict["mappings.0.seq_region_name"] = chrom
@@ -66,7 +73,12 @@ def searchdb():
         else: pass
 
         if var_cons and var_cons != "NULL":
-            q_dict["most_severe_consequence"] = var_cons
+            or_qdict = {}
+            or_qdict["$or"] = []
+            for i in var_cons:
+                q = {"most_severe_consequence":i}
+                or_qdict["$or"].append(q)
+            q_dict["$and"].append(or_qdict)
         else: pass
 
         if start and end:
@@ -76,7 +88,10 @@ def searchdb():
 
         # Submit query to MongoDB database
         query = mongo.db.variants.find(q_dict)
-        query = query.limit(20)
+        count = mongo.db.variants.count(q_dict)
+        print(count)
+        flash(f"Query returned {count} records",'info')
+        query = query.limit(200)
 
     else:
         query = None

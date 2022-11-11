@@ -79,7 +79,7 @@
     <form method="POST">
         <p>
             <p>Search by variant type:
-            <select name="variant_type_search">
+            <select multiple name="variant_type_search" id="variant_type_search">
                 <option value="NULL">-- select option --</option>
                 {% for v in var_classes %}
                     <option value="{{v}}">{{v}}</option>
@@ -102,7 +102,7 @@
         </p>
         <p>
             <p>Search by most severe consequence:
-            <select name="var_cons">
+            <select multiple name="var_cons" id="var_cons">
               <option value="NULL">-- select option --</option>
                 {% for cons in var_cons %}
                     <option value="{{cons}}">{{cons}}</option>
